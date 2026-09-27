@@ -1,0 +1,454 @@
+/* Provisional Mud Authority — "Issued" palette and type, from the PMA Brand
+   Kit Spec. Pages are Ink on Cream. One accent per surface. Orange and Stamp
+   Red never appear together. */
+
+:root {
+  --ink: #3b3128;          /* Authority Ink: all type, line art */
+  --cream: #f5f0e6;        /* grounds; never pure white */
+  --kraft: #c8a97a;        /* packaging accents, card edges */
+  --orange: #e8641b;       /* Issue Orange: links, CTAs, the one loud voice */
+  --glass: #8fa3ad;        /* cool fills */
+  --stamp: #a32e22;        /* Stamp Red: stamped marks only, sparingly */
+
+  --ink-soft: rgb(59 49 40 / 0.72);
+  --ink-line: rgb(59 49 40 / 0.22);
+  --paper: #fbf8f1;        /* a lighter cream for raised cards */
+  --orange-ink: #b8490c;   /* orange darkened for text on cream (contrast) */
+
+  --font-heading: "Oswald", "League Gothic", "Arial Narrow", sans-serif;
+  --font-body: "EB Garamond", Garamond, Georgia, serif;
+  --font-form: "Special Elite", "Courier New", monospace;
+
+  --radius: 4px;
+  --tap: 48px;
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.45;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  -webkit-text-size-adjust: 100%;
+}
+
+main { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+
+a { color: var(--orange-ink); text-underline-offset: 3px; }
+
+h1, h2, h3 {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 0 0 0.5em;
+}
+h1 { font-size: 1.6rem; }
+h2 { font-size: 1.2rem; }
+h3 { font-size: 1rem; }
+
+.form-no {
+  font-family: var(--font-form);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+}
+
+/* Header / footer ------------------------------------------------------ */
+
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: max(10px, env(safe-area-inset-top)) 16px 10px;
+  border-bottom: 2px solid var(--ink);
+  background: var(--cream);
+  position: relative;
+  z-index: 1000;
+}
+
+.site-title { display: flex; flex-direction: column; text-decoration: none; color: var(--ink); }
+.site-name {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.site-nav { display: flex; align-items: center; gap: 4px; }
+.site-nav a {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.85rem;
+  color: var(--ink);
+  text-decoration: none;
+  padding: 10px 10px;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+}
+.site-nav a.nav-cta {
+  background: var(--orange);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  font-weight: 600;
+}
+
+.site-footer {
+  padding: 12px 16px max(12px, env(safe-area-inset-bottom));
+  border-top: 1px solid var(--ink-line);
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+@media (max-width: 599px) {
+  .site-header { padding-top: max(6px, env(safe-area-inset-top)); padding-bottom: 6px; row-gap: 0; }
+  .site-header .form-no { display: none; }
+  .site-name { font-size: 0.95rem; }
+  .site-nav { margin-left: -10px; }
+  .site-nav a { min-height: 44px; }
+  .site-nav a.nav-cta { padding: 6px 12px; }
+  .site-footer { padding-top: 8px; font-size: 0.8rem; }
+}
+
+/* Buttons and form controls ------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: var(--tap);
+  padding: 10px 18px;
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  cursor: pointer;
+  text-decoration: none;
+}
+.btn:disabled { opacity: 0.5; cursor: default; }
+.btn-primary { background: var(--orange); }
+.btn-quiet { border-color: var(--ink-line); background: transparent; }
+.btn-small { min-height: 40px; padding: 6px 12px; font-size: 0.85rem; }
+
+label { display: block; }
+.field { margin-bottom: 20px; }
+.field-label {
+  display: block;
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.field-hint { display: block; font-size: 0.95rem; color: var(--ink-soft); margin-bottom: 6px; }
+
+input[type="text"], input[type="search"], input[type="password"], textarea, select {
+  width: 100%;
+  font: inherit;
+  font-size: 18px; /* stops iOS zooming on focus */
+  color: var(--ink);
+  background: var(--paper);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  min-height: var(--tap);
+}
+textarea { min-height: 88px; resize: vertical; }
+input:focus-visible, textarea:focus-visible, select:focus-visible, .btn:focus-visible, a:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 2px;
+}
+
+.choice-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--tap);
+  padding: 8px 14px;
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper);
+  cursor: pointer;
+}
+.choice input { width: 20px; height: 20px; accent-color: var(--ink); margin: 0; }
+
+.notice {
+  border: 1.5px dashed var(--ink);
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--paper);
+}
+.error { color: var(--ink); font-weight: 600; border-left: 4px solid var(--ink); padding: 2px 0 2px 10px; }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* The honeypot: off-screen for people, visible to naive bots. */
+.hp { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+
+/* Text pages ------------------------------------------------------------ */
+
+.page {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+}
+.page p { margin: 0 0 1em; }
+
+/* A crayon underline, running slightly off the edge, as though a child got
+   to the heading first. */
+.crayon {
+  position: relative;
+  display: inline-block;
+}
+.crayon::after {
+  content: "";
+  position: absolute;
+  left: -4px;
+  right: -18px;
+  bottom: -6px;
+  height: 9px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 10' preserveAspectRatio='none'%3E%3Cpath d='M2 6 C 40 2, 80 9, 120 5 S 180 3, 198 7' stroke='%23E8641B' stroke-width='4' fill='none' stroke-linecap='round' opacity='.85'/%3E%3C/svg%3E") no-repeat center / 100% 100%;
+  pointer-events: none;
+}
+
+/* Map -------------------------------------------------------------------- */
+
+.map-page { position: relative; flex: 1; display: flex; min-height: 420px; }
+.map-canvas { flex: 1; min-height: 420px; background: #e9e2d3; }
+/* Keep Leaflet's internal z-indexes (panes 400, controls 1000) inside the map
+   so the pin card and buttons can sit above them. */
+.map-canvas, .picker-map { isolation: isolate; z-index: 0; }
+
+/* Warm the OSM tiles toward cream without hurting legibility. */
+.leaflet-tile-pane { filter: sepia(0.28) saturate(0.85) brightness(1.02); }
+.leaflet-container { font-family: var(--font-body); }
+.leaflet-control-attribution { font-size: 11px; }
+.leaflet-bar a { color: var(--ink); }
+
+.pin-marker {
+  width: 30px;
+  height: 30px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  background: var(--orange);
+  border: 2.5px solid var(--ink);
+  box-shadow: 0 2px 3px rgb(0 0 0 / 0.25);
+}
+.pin-marker::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+.pin-marker.is-stale { background: var(--kraft); opacity: 0.55; }
+.pin-marker.is-selected { outline: 3px solid var(--ink); outline-offset: 2px; }
+.pin-marker.is-draft { background: var(--glass); }
+
+.map-empty {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+  width: calc(100% - 32px);
+  max-width: 420px;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.locate-btn {
+  position: absolute;
+  z-index: 500;
+  right: 12px;
+  bottom: 24px;
+}
+
+/* Pin card: a bottom sheet on phones, a side panel on wide screens. */
+.pin-card {
+  position: absolute;
+  z-index: 800;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 72%;
+  overflow-y: auto;
+  background: var(--paper);
+  border-top: 2px solid var(--ink);
+  box-shadow: 0 -6px 18px rgb(0 0 0 / 0.18);
+  padding: 16px 16px max(20px, env(safe-area-inset-bottom));
+  -webkit-overflow-scrolling: touch;
+}
+@media (min-width: 820px) {
+  .pin-card {
+    left: auto;
+    top: 16px;
+    right: 16px;
+    bottom: 16px;
+    width: 380px;
+    max-height: none;
+    border: 2px solid var(--ink);
+    border-radius: var(--radius);
+    box-shadow: 4px 4px 0 var(--ink-line);
+  }
+}
+
+.pin-card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.pin-card h2 { margin: 2px 0 8px; font-size: 1.15rem; }
+.close-btn {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  font-size: 26px;
+  line-height: 1;
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+.pin-photo {
+  display: block;
+  width: 100%;
+  max-height: 240px;
+  object-fit: cover;
+  border: 1.5px solid var(--ink);
+  margin: 4px 0 12px;
+  background: var(--cream);
+}
+.pin-facts { margin: 0 0 12px; }
+.pin-facts dt {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  margin-top: 10px;
+}
+.pin-facts dd { margin: 2px 0 0; }
+.stale-note {
+  font-family: var(--font-form);
+  font-size: 0.85rem;
+  border: 1.5px dashed var(--ink);
+  padding: 8px 10px;
+  margin: 8px 0 12px;
+}
+.confirmed { font-family: var(--font-form); font-size: 0.85rem; color: var(--ink-soft); }
+.pin-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 14px; }
+.link-btn {
+  background: none;
+  border: none;
+  padding: 10px 4px;
+  font: inherit;
+  color: var(--ink-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+/* Submission form ------------------------------------------------------ */
+
+.picker-wrap { position: relative; }
+.picker-map {
+  height: 320px;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  background: #e9e2d3;
+}
+.picker-status { font-family: var(--font-form); font-size: 0.85rem; margin-top: 6px; color: var(--ink-soft); }
+.search-row { display: flex; gap: 8px; margin-bottom: 8px; }
+.search-row input { flex: 1; min-width: 0; }
+.search-hits { list-style: none; margin: 0 0 8px; padding: 0; border: 1.5px solid var(--ink); border-radius: var(--radius); background: var(--paper); }
+.search-hits li + li { border-top: 1px solid var(--ink-line); }
+.search-hits button {
+  display: block;
+  width: 100%;
+  min-height: var(--tap);
+  text-align: left;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 0.95rem;
+  background: none;
+  border: none;
+  color: var(--ink);
+  cursor: pointer;
+}
+.photo-preview { max-width: 100%; max-height: 220px; border: 1.5px solid var(--ink); display: block; margin-top: 8px; }
+
+/* Stamp Red is reserved for APPROVED marks. The header carries Issue Orange
+   on every page, so this stamp is inked, not red. */
+.stamp {
+  display: inline-block;
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--ink);
+  border: 3px solid var(--ink);
+  padding: 4px 14px;
+  transform: rotate(-5deg);
+  opacity: 0.85;
+  margin: 8px 0 20px;
+}
+
+/* Admin ------------------------------------------------------------------ */
+
+.admin { max-width: 960px; }
+.admin-section { margin-bottom: 40px; }
+.admin-item {
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper);
+  padding: 14px;
+  margin-bottom: 14px;
+  display: grid;
+  gap: 12px;
+}
+@media (min-width: 700px) {
+  .admin-item { grid-template-columns: 220px 1fr; }
+}
+.admin-item img { width: 100%; max-height: 220px; object-fit: cover; border: 1px solid var(--ink-line); }
+.admin-item .no-photo {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 100px; border: 1px dashed var(--ink-line);
+  font-family: var(--font-form); font-size: 0.85rem; color: var(--ink-soft);
+}
+.admin-meta { font-family: var(--font-form); font-size: 0.8rem; color: var(--ink-soft); }
+.admin-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.admin-actions form { display: contents; }
+.report-list { margin: 8px 0 0; padding-left: 18px; font-size: 0.95rem; }
+.count { font-family: var(--font-form); font-size: 0.9rem; color: var(--ink-soft); }
+.tab-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }

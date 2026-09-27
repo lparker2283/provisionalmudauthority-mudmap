@@ -1,0 +1,13 @@
+[
+  {
+    "name": "Inner Loop North",
+    "lat": 43.1622,
+    "lng": -77.6040,
+    "description": "EXAMPLE, NOT YET SCOUTED. Replace with what you see on the day: which stretch is active, what's being built.",
+    "equipment": "e.g. excavators, dump trucks, a roller",
+    "viewing_spot": "e.g. the sidewalk on the north side of the street, facing the work",
+    "safe_parking": true,
+    "parking_note": "e.g. metered street parking; stay on the sidewalk",
+    "photo": null
+  }
+]
