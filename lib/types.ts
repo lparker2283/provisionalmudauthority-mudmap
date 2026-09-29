@@ -30,3 +30,5 @@ export type Report = {
   status: "open" | "dismissed";
   created_at: string;
 };
+
+export type GeocodeHit = { label: string; lat: number; lng: number };
