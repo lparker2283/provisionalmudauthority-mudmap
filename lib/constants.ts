@@ -56,3 +56,11 @@ export function formatDate(iso: string) {
     timeZone: "America/New_York",
   });
 }
+
+// Joins free-text notes into one line, adding a full stop between them.
+export function joinNotes(...notes: (string | null | undefined)[]) {
+  return notes
+    .filter((n): n is string => !!n && !!n.trim())
+    .map((n) => n.trim().replace(/[^.!?]$/, "$&."))
+    .join(" ");
+}

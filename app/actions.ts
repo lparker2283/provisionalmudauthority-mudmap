@@ -1,7 +1,7 @@
 "use server";
 
 import { randomUUID } from "node:crypto";
-import { LIMITS, PHOTO_BUCKET, REPORT_REASONS, SERVICE_AREA, type ReportReason } from "@/lib/constants";
+import { LIMITS, PHOTO_BUCKET, REPORT_REASONS, type ReportReason } from "@/lib/constants";
 import { rateLimit } from "@/lib/request";
 import { db } from "@/lib/supabase";
 import { isValidPhotoPath, parsePinInput } from "@/lib/validate";
@@ -79,49 +79,4 @@ export async function reportPin(pinId: string, reason: string, note: string): Pr
     return { ok: false, error: "Something went wrong filing that report. Please try again." };
   }
   return { ok: true };
-}
-
-// --- Address search ------------------------------------------------------------
-// Uses OpenStreetMap's free Nominatim service, restricted to greater
-// Rochester. Only called when someone presses Search, never per keystroke,
-// which keeps us inside Nominatim's usage policy.
-
-export type GeocodeHit = { label: string; lat: number; lng: number };
-
-export async function geocode(query: string): Promise<{ ok: true; hits: GeocodeHit[] } | { ok: false; error: string }> {
-  const q = query.trim().slice(0, 200);
-  if (q.length < 3) return { ok: false, error: "Type a bit more of the address." };
-  if (!(await rateLimit("geocode", 30, 10))) return { ok: false, error: SLOW_DOWN };
-
-  const { west, north, east, south } = SERVICE_AREA;
-  const url = new URL("https://nominatim.openstreetmap.org/search");
-  url.searchParams.set("q", q);
-  url.searchParams.set("format", "jsonv2");
-  url.searchParams.set("limit", "5");
-  url.searchParams.set("countrycodes", "us");
-  url.searchParams.set("viewbox", `${west},${north},${east},${south}`);
-  url.searchParams.set("bounded", "1");
-
-  try {
-    const res = await fetch(url, {
-      headers: {
-        "User-Agent": "PMA-ConstructionMap/1.0 (https://map.provisionalmudauthority.com)",
-        "Accept-Language": "en",
-      },
-      cache: "no-store",
-    });
-    if (!res.ok) throw new Error(`Nominatim ${res.status}`);
-    const rows = (await res.json()) as { display_name: string; lat: string; lon: string }[];
-    return {
-      ok: true,
-      hits: rows.map((r) => ({
-        label: r.display_name.replace(/, United States$/, ""),
-        lat: Number(r.lat),
-        lng: Number(r.lon),
-      })),
-    };
-  } catch (e) {
-    console.error("geocode", e);
-    return { ok: false, error: "Address search is unavailable right now. You can tap the map instead." };
-  }
 }

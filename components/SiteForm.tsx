@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import LeafletMap from "./MapLoader";
-import { geocode, type GeocodeHit } from "@/app/actions";
+import AddressSearch from "./AddressSearch";
 import { LIMITS, MAX_PHOTO_BYTES, inServiceArea } from "@/lib/constants";
 
 type Result = { ok: true } | { ok: false; error: string };
@@ -43,9 +43,8 @@ export default function SiteForm({ mode, submitAction, uploadAction, onSubmitted
   const [startedAt] = useState(() => Date.now());
   const [point, setPoint] = useState<{ lat: number; lng: number } | null>(null);
   const [flyTo, setFlyTo] = useState<[number, number] | null>(null);
-  const [query, setQuery] = useState("");
-  const [hits, setHits] = useState<GeocodeHit[] | null>(null);
-  const [searching, setSearching] = useState(false);
+  // Bumped to clear the address box when the admin form resets.
+  const [searchKey, setSearchKey] = useState(0);
   const [locError, setLocError] = useState<string | null>(null);
   const [safeParking, setSafeParking] = useState<"yes" | "no" | "">("");
   const [photo, setPhoto] = useState<{ blob: Blob; preview: string } | null>(null);
@@ -61,17 +60,6 @@ export default function SiteForm({ mode, submitAction, uploadAction, onSubmitted
     setLocError(null);
     setPoint({ lat, lng });
     if (fly) setFlyTo([lat, lng]);
-  }
-
-  async function search(e?: React.FormEvent | React.KeyboardEvent) {
-    e?.preventDefault();
-    setSearching(true);
-    setLocError(null);
-    const res = await geocode(query);
-    setSearching(false);
-    if (!res.ok) return setLocError(res.error);
-    if (res.hits.length === 0) return setLocError("No match in greater Rochester. Try a street and town, or tap the map.");
-    setHits(res.hits);
   }
 
   function useMyLocation() {
@@ -139,8 +127,7 @@ export default function SiteForm({ mode, submitAction, uploadAction, onSubmitted
       setSafeParking("");
       if (photo) URL.revokeObjectURL(photo.preview);
       setPhoto(null);
-      setHits(null);
-      setQuery("");
+      setSearchKey((k) => k + 1);
       setStatus("idle");
       onSubmitted?.();
       return;
@@ -177,38 +164,8 @@ export default function SiteForm({ mode, submitAction, uploadAction, onSubmitted
 
       <div className="field">
         <span className="field-label">1. Where is it?</span>
-        <span className="field-hint">Search an address, use your location, or tap the map. You can drag the pin to adjust.</span>
-        <div className="search-row">
-          <input
-            type="search"
-            aria-label="Search an address"
-            placeholder="e.g. 1 Main St, Rochester"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && search(e)}
-            enterKeyHint="search"
-          />
-          <button type="button" className="btn" onClick={() => search()} disabled={searching || query.trim().length < 3}>
-            {searching ? "…" : "Search"}
-          </button>
-        </div>
-        {hits && hits.length > 0 && (
-          <ul className="search-hits">
-            {hits.map((h, i) => (
-              <li key={i}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    pick(h.lat, h.lng, true);
-                    setHits(null);
-                  }}
-                >
-                  {h.label}
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
+        <span className="field-hint">Start typing an address, use your location, or tap the map. You can drag the pin to adjust.</span>
+        <AddressSearch key={searchKey} onPick={(h) => pick(h.lat, h.lng, true)} />
         <button type="button" className="btn btn-quiet btn-small" onClick={useMyLocation} style={{ marginBottom: 8 }}>
           Use my location
         </button>
@@ -236,25 +193,16 @@ export default function SiteForm({ mode, submitAction, uploadAction, onSubmitted
       )}
 
       <label className="field">
-        <span className="field-label">{mode === "public" && "3. "}Short description</span>
-        <span className="field-hint">What’s happening there, in a sentence or two.</span>
+        <span className="field-label">{mode === "public" && "3. "}What’s happening?</span>
+        <span className="field-hint">
+          What’s being built, and which machines you saw: excavators, dump trucks, a crane, a roller…
+        </span>
         <textarea name="description" maxLength={LIMITS.description} rows={3} required />
       </label>
 
-      <label className="field">
-        <span className="field-label">{mode === "public" && "4. "}Equipment visible</span>
-        <span className="field-hint">Excavators, dump trucks, a crane, a roller…</span>
-        <input type="text" name="equipment" maxLength={LIMITS.equipment} />
-      </label>
-
-      <label className="field">
-        <span className="field-label">{mode === "public" && "5. "}Best viewing spot</span>
-        <span className="field-hint">Where a small person gets the best view.</span>
-        <input type="text" name="viewing_spot" maxLength={LIMITS.viewingSpot} />
-      </label>
-
       <fieldset className="field" style={{ border: 0, padding: 0, margin: "0 0 20px" }}>
-        <legend className="field-label">{mode === "public" && "6. "}Safe parking or a sidewalk to stand on?</legend>
+        <legend className="field-label">{mode === "public" && "4. "}Is there a safe place to stand and watch?</legend>
+        <span className="field-hint">A sidewalk, a parking lot, somewhere off the road.</span>
         <div className="choice-row">
           <label className="choice">
             <input type="radio" name="safe_parking_choice" checked={safeParking === "yes"} onChange={() => setSafeParking("yes")} />
@@ -265,15 +213,19 @@ export default function SiteForm({ mode, submitAction, uploadAction, onSubmitted
             No / not sure
           </label>
         </div>
-        <label style={{ marginTop: 10 }}>
-          <span className="field-hint">Where to park or stand (optional)</span>
-          <input type="text" name="parking_note" maxLength={LIMITS.parkingNote} />
+        <label style={{ marginTop: 14 }}>
+          <span className="field-label">Where to park and watch from (optional)</span>
+          <span className="field-hint">
+            e.g. “Park at the library lot, watch from the Main St sidewalk. There’s a gap in the fence at kid
+            height.”
+          </span>
+          <textarea name="viewing_spot" maxLength={LIMITS.viewingSpot} rows={2} />
         </label>
       </fieldset>
 
       <div className="field">
         <label htmlFor="photo" className="field-label">
-          {mode === "public" && "7. "}Photo (optional)
+          {mode === "public" && "5. "}Photo (optional)
         </label>
         <p className="notice" style={{ margin: "6px 0 10px" }}>
           <strong>Photos of sites and machines only. No photos of people</strong>, including workers and

@@ -388,8 +388,6 @@ input:focus-visible, textarea:focus-visible, select:focus-visible, .btn:focus-vi
   background: #e9e2d3;
 }
 .picker-status { font-family: var(--font-form); font-size: 0.85rem; margin-top: 6px; color: var(--ink-soft); }
-.search-row { display: flex; gap: 8px; margin-bottom: 8px; }
-.search-row input { flex: 1; min-width: 0; }
 .search-hits { list-style: none; margin: 0 0 8px; padding: 0; border: 1.5px solid var(--ink); border-radius: var(--radius); background: var(--paper); }
 .search-hits li + li { border-top: 1px solid var(--ink-line); }
 .search-hits button {
@@ -452,3 +450,16 @@ input:focus-visible, textarea:focus-visible, select:focus-visible, .btn:focus-vi
 .report-list { margin: 8px 0 0; padding-left: 18px; font-size: 0.95rem; }
 .count { font-family: var(--font-form); font-size: 0.9rem; color: var(--ink-soft); }
 .tab-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+
+/* Address autocomplete */
+.address-search { position: relative; margin-bottom: 8px; }
+.address-search input { padding-right: 36px; }
+.address-loading {
+  position: absolute; right: 12px; top: 12px;
+  font-family: var(--font-form); color: var(--ink-soft);
+}
+.address-search .search-hits {
+  position: absolute; z-index: 1100; left: 0; right: 0; top: calc(100% + 4px);
+  box-shadow: 4px 4px 0 var(--ink-line);
+}
+.search-hits li[aria-selected="true"] button { background: var(--cream); text-decoration: underline; text-underline-offset: 3px; }

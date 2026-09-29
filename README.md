@@ -6,11 +6,12 @@ Provisional Mud Authority.
 
 Live at **https://map.provisionalmudauthority.com**
 
-- **Map** (`/`): approved sites only. Tap a pin for the description, equipment, best viewing spot,
-  safe parking/sidewalk, photo, last-confirmed date, directions, and "Report this pin". Pins not
+- **Map** (`/`): approved sites only. Tap a pin for what's happening (including the machines), whether
+  there's a safe place to stand, where to park and watch, a photo, the last-confirmed date, directions,
+  and "Report this pin". Pins not
   confirmed in 60 days fade.
-- **Add a site** (`/add`): no account needed. Mark the location by address search, "use my location",
-  or tapping the map. One optional photo (sites and machines only, no people). Every submission waits
+- **Add a site** (`/add`): no account needed. Mark the location by typing an address (suggestions
+  appear as you type), "use my location", or tapping the map. One optional photo (sites and machines only, no people). Every submission waits
   in a moderation queue.
 - **About** (`/about`)
 - **Admin** (`/admin`): one password. Approve or reject the queue, handle reported pins (dismiss,
@@ -20,7 +21,9 @@ Live at **https://map.provisionalmudauthority.com**
 
 - Next.js 16 (App Router) on Vercel
 - Supabase Postgres for pins, reports and rate limiting; Supabase Storage for photos
-- Leaflet with free OpenStreetMap tiles; address search uses OpenStreetMap's Nominatim. No paid map APIs.
+- Leaflet with free OpenStreetMap tiles. Address autocomplete uses [Photon](https://photon.komoot.io), a
+  free OpenStreetMap geocoder built for search-as-you-type, called through `app/api/geocode` so visitors'
+  IPs aren't passed on. No paid map APIs and no keys.
 - Brand tokens (Authority Ink, Cream, Issue Orange, Oswald / EB Garamond / Special Elite) come from the
   PMA Brand Kit Spec in Notion and live as CSS variables at the top of `app/globals.css`.
 
