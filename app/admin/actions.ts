@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { endSession, passwordMatches, requireAdmin, startSession } from "@/lib/auth";
 import { PHOTO_BUCKET } from "@/lib/constants";
+import { sendTestNotification } from "@/lib/notify";
 import { rateLimit } from "@/lib/request";
 import { db, deletePhoto } from "@/lib/supabase";
 import { isValidPhotoPath, parsePinInput } from "@/lib/validate";
@@ -98,4 +99,11 @@ export async function adminAddPin(raw: Record<string, unknown>): Promise<{ ok: t
   if (error) return { ok: false, error: error.message };
   refresh();
   return { ok: true };
+}
+
+// --- Notifications -------------------------------------------------------------
+
+export async function testNotification(_prev: string | null): Promise<string> {
+  await requireAdmin();
+  return sendTestNotification();
 }

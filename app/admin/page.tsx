@@ -6,6 +6,7 @@ import { db, photoUrl } from "@/lib/supabase";
 import type { Pin, Report } from "@/lib/types";
 import AdminAddForm from "./AdminAddForm";
 import LoginForm from "./LoginForm";
+import TestNotifyButton from "./TestNotifyButton";
 import {
   approvePin,
   confirmPin,
@@ -71,6 +72,14 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
         </section>
       )}
       {view === "all" && <AllPins />}
+
+      <section className="admin-section">
+        <h2>Notifications</h2>
+        <p className="field-hint">
+          Pushes to your phone through the ntfy app when something new arrives, at most once every 10 minutes.
+        </p>
+        <TestNotifyButton />
+      </section>
     </div>
   );
 }

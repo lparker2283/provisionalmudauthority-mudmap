@@ -34,8 +34,9 @@ Live at **https://map.provisionalmudauthority.com**
 | `SUPABASE_URL` | Supabase → Project Settings → API → Project URL | e.g. `https://abcd1234.supabase.co` |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Project Settings → API → `service_role` secret | **Server only.** Never commit it, and never give it a `NEXT_PUBLIC_` prefix. |
 | `ADMIN_PASSWORD` | You choose | The `/admin` password. Make it long. Changing it signs everyone out. |
+| `NTFY_TOPIC` | You choose (optional) | Turns on phone push notifications. See [Notifications](#notifications). |
 
-These three are all. The browser never talks to the database: every read and write goes through the
+The first three are required; notifications are optional. The browser never talks to the database: every read and write goes through the
 server, and row level security is on with no public policies, so Supabase's public keys can't read
 anything directly.
 
@@ -113,6 +114,23 @@ The first sites are scouted in person, starting with Inner Loop North downtown. 
 - **Reported:** open reports grouped by pin. **Dismiss report** keeps the pin as it is. **Still active:
   refresh date** resets the 60-day clock and clears the reports. **Remove pin** deletes it and its photo.
 - **All live pins:** oldest confirmation first, for periodic tidying.
+
+## Notifications
+
+The moderator gets a phone push through [ntfy](https://ntfy.sh), which is free and needs no account,
+when a site is submitted or a pin is reported.
+
+1. Install the ntfy app from the App Store or Google Play (links on
+   [ntfy's phone setup page](https://docs.ntfy.sh/subscribe/phone/)).
+2. Pick a long, unguessable topic name, e.g. `pma-queue-` followed by 20 random letters and digits.
+   Anyone who knows the name can read and send messages on it, so treat it like a password.
+3. In the app, tap **+** → subscribe to that topic on the default server (`ntfy.sh`).
+4. In Vercel, add `NTFY_TOPIC` with that name, then redeploy.
+5. In `/admin`, press **Send test notification**.
+
+Pushes are sent at most once every 10 minutes, so a burst of submissions (or spam) means one buzz. They
+contain counts only ("2 sites to review and 1 reported pin to check"), never what anyone wrote. Tapping
+one opens `/admin`. If ntfy is unreachable, submissions still go through; the push is just skipped.
 
 ## Privacy and spam
 

@@ -1,7 +1,9 @@
 "use server";
 
 import { randomUUID } from "node:crypto";
+import { after } from "next/server";
 import { LIMITS, PHOTO_BUCKET, REPORT_REASONS, type ReportReason } from "@/lib/constants";
+import { notifyQueueChanged } from "@/lib/notify";
 import { rateLimit } from "@/lib/request";
 import { db } from "@/lib/supabase";
 import { isValidPhotoPath, parsePinInput } from "@/lib/validate";
@@ -57,6 +59,7 @@ export async function submitPin(raw: Record<string, unknown>): Promise<Result> {
     console.error("submitPin", error.message);
     return { ok: false, error: "Something went wrong filing that. Please try again." };
   }
+  after(notifyQueueChanged);
   return { ok: true };
 }
 
@@ -78,5 +81,6 @@ export async function reportPin(pinId: string, reason: string, note: string): Pr
     console.error("reportPin", error.message);
     return { ok: false, error: "Something went wrong filing that report. Please try again." };
   }
+  after(notifyQueueChanged);
   return { ok: true };
 }
