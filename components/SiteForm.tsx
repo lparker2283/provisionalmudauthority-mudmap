@@ -193,25 +193,16 @@ export default function SiteForm({ mode, submitAction, uploadAction, onSubmitted
       )}
 
       <label className="field">
-        <span className="field-label">{mode === "public" && "3. "}Short description</span>
-        <span className="field-hint">What’s happening there, in a sentence or two.</span>
+        <span className="field-label">{mode === "public" && "3. "}What’s happening?</span>
+        <span className="field-hint">
+          What’s being built, and which machines you saw: excavators, dump trucks, a crane, a roller…
+        </span>
         <textarea name="description" maxLength={LIMITS.description} rows={3} required />
       </label>
 
-      <label className="field">
-        <span className="field-label">{mode === "public" && "4. "}Equipment visible</span>
-        <span className="field-hint">Excavators, dump trucks, a crane, a roller…</span>
-        <input type="text" name="equipment" maxLength={LIMITS.equipment} />
-      </label>
-
-      <label className="field">
-        <span className="field-label">{mode === "public" && "5. "}Best viewing spot</span>
-        <span className="field-hint">Where a small person gets the best view.</span>
-        <input type="text" name="viewing_spot" maxLength={LIMITS.viewingSpot} />
-      </label>
-
       <fieldset className="field" style={{ border: 0, padding: 0, margin: "0 0 20px" }}>
-        <legend className="field-label">{mode === "public" && "6. "}Safe parking or a sidewalk to stand on?</legend>
+        <legend className="field-label">{mode === "public" && "4. "}Is there a safe place to stand and watch?</legend>
+        <span className="field-hint">A sidewalk, a parking lot, somewhere off the road.</span>
         <div className="choice-row">
           <label className="choice">
             <input type="radio" name="safe_parking_choice" checked={safeParking === "yes"} onChange={() => setSafeParking("yes")} />
@@ -222,15 +213,19 @@ export default function SiteForm({ mode, submitAction, uploadAction, onSubmitted
             No / not sure
           </label>
         </div>
-        <label style={{ marginTop: 10 }}>
-          <span className="field-hint">Where to park or stand (optional)</span>
-          <input type="text" name="parking_note" maxLength={LIMITS.parkingNote} />
+        <label style={{ marginTop: 14 }}>
+          <span className="field-label">Where to park and watch from (optional)</span>
+          <span className="field-hint">
+            e.g. “Park at the library lot, watch from the Main St sidewalk. There’s a gap in the fence at kid
+            height.”
+          </span>
+          <textarea name="viewing_spot" maxLength={LIMITS.viewingSpot} rows={2} />
         </label>
       </fieldset>
 
       <div className="field">
         <label htmlFor="photo" className="field-label">
-          {mode === "public" && "7. "}Photo (optional)
+          {mode === "public" && "5. "}Photo (optional)
         </label>
         <p className="notice" style={{ margin: "6px 0 10px" }}>
           <strong>Photos of sites and machines only. No photos of people</strong>, including workers and

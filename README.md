@@ -6,8 +6,9 @@ Provisional Mud Authority.
 
 Live at **https://map.provisionalmudauthority.com**
 
-- **Map** (`/`): approved sites only. Tap a pin for the description, equipment, best viewing spot,
-  safe parking/sidewalk, photo, last-confirmed date, directions, and "Report this pin". Pins not
+- **Map** (`/`): approved sites only. Tap a pin for what's happening (including the machines), whether
+  there's a safe place to stand, where to park and watch, a photo, the last-confirmed date, directions,
+  and "Report this pin". Pins not
   confirmed in 60 days fade.
 - **Add a site** (`/add`): no account needed. Mark the location by typing an address (suggestions
   appear as you type), "use my location", or tapping the map. One optional photo (sites and machines only, no people). Every submission waits

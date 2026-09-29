@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { isAdmin } from "@/lib/auth";
-import { REPORT_REASONS, formatDate, isStale, type ReportReason } from "@/lib/constants";
+import { REPORT_REASONS, formatDate, isStale, joinNotes, type ReportReason } from "@/lib/constants";
 import { db, photoUrl } from "@/lib/supabase";
 import type { Pin, Report } from "@/lib/types";
 import AdminAddForm from "./AdminAddForm";
@@ -101,9 +101,11 @@ function PinSummary({ pin }: { pin: Pin }) {
         <p style={{ margin: "0 0 6px" }}>{pin.description}</p>
         <dl className="pin-facts" style={{ margin: 0 }}>
           {pin.equipment && (<><dt>Equipment</dt><dd>{pin.equipment}</dd></>)}
-          {pin.viewing_spot && (<><dt>Viewing spot</dt><dd>{pin.viewing_spot}</dd></>)}
-          <dt>Safe parking / sidewalk</dt>
-          <dd>{pin.safe_parking ? "Yes" : "No / not sure"}{pin.parking_note ? `. ${pin.parking_note}` : ""}</dd>
+          <dt>Safe place to stand</dt>
+          <dd>{pin.safe_parking ? "Yes" : "No / not sure"}</dd>
+          {(pin.viewing_spot || pin.parking_note) && (
+            <><dt>Where to park and watch</dt><dd>{joinNotes(pin.viewing_spot, pin.parking_note)}</dd></>
+          )}
         </dl>
         <p className="admin-meta" style={{ marginTop: 8 }}>
           Filed {formatDate(pin.created_at)} · Last confirmed {formatDate(pin.last_confirmed_at)}

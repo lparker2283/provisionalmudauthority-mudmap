@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { reportPin } from "@/app/actions";
-import { REPORT_REASONS, STALE_AFTER_DAYS, formatDate, isStale } from "@/lib/constants";
+import { REPORT_REASONS, STALE_AFTER_DAYS, formatDate, isStale, joinNotes } from "@/lib/constants";
 import type { PublicPin } from "@/lib/types";
 
 export default function PinCard({ pin, onClose }: { pin: PublicPin; onClose: () => void }) {
@@ -68,17 +68,14 @@ export default function PinCard({ pin, onClose }: { pin: PublicPin; onClose: () 
             <dd>{pin.equipment}</dd>
           </>
         )}
-        {pin.viewing_spot && (
+        <dt>Safe place to stand</dt>
+        <dd>{pin.safe_parking ? "Yes" : "Not confirmed"}</dd>
+        {(pin.viewing_spot || pin.parking_note) && (
           <>
-            <dt>Best place to watch from</dt>
-            <dd>{pin.viewing_spot}</dd>
+            <dt>Where to park and watch</dt>
+            <dd>{joinNotes(pin.viewing_spot, pin.parking_note)}</dd>
           </>
         )}
-        <dt>Safe parking or sidewalk</dt>
-        <dd>
-          {pin.safe_parking ? "Yes" : "Not confirmed"}
-          {pin.parking_note ? `. ${pin.parking_note}` : ""}
-        </dd>
       </dl>
 
       <p className="confirmed">Last confirmed {formatDate(pin.last_confirmed_at)}</p>
